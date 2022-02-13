@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style2.css" />
+    <title>Rank It.</title>
+    <link
+      rel="icon"
+      href="https://cdn.discordapp.com/attachments/591007423062605825/929849003733028864/RICON.png"
+    />
+  </head>
+  <body>
+    <script>
+      async function getAlbumTracks() {
+        AlbumName = localStorage.getItem("textvalue");
+        ArtistName = localStorage.getItem("textvalue2");
+
+        AlbumName = AlbumName.replace(" ", "+");
+        ArtistName = ArtistName.replace(" ", "+");
+
+        //API that gets json file of album information given artist's name and album name
+        const response = await fetch(
+          "https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=d94b7d68284cbab1cdb7c2c3c81fd913&artist=" +
+            ArtistName +
+            "&album=" +
+            AlbumName +
+            "&format=json"
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || data.album.tracks == undefined) {
+          alert(
+            "Error: Album was not found. Please try entering the album name and artist name exactly how it would appear on any streaming service. \nIf you have done so already, then the album is unfortunately unavailable to be ranked."
+          );
+          window.location.href = "http://127.0.0.1:5501/index.html";
+        }
+
+        //Declaring numberOfTracks and TrackList array
+        const numberOfTracks = data.album.tracks.track.length;
+        const ArtistName2 = data.album.artist;
+        localStorage.setItem("ArtistName", ArtistName2);
+        const AlbumName2 = data.album.name;
+        localStorage.setItem("AlbumName", AlbumName2);
+        const AlbumImage = data.album.image[2]["#text"];
+        localStorage.setItem("AlbumImage", AlbumImage);
+        const TrackList = [];
+
+        //For Loop that gets each song name and puts them in TrackList[]
+        for (let i = 0; i < numberOfTracks; i++) {
+          TrackList[i] = data.album.tracks.track[i].name;
+        }
+
+        localStorage.setItem("numberOfTracks", numberOfTracks);
+        localStorage.setItem("TrackList", JSON.stringify(TrackList));
+
+        //All the code below is used to display the tracks with numbers on the webpage
+        let list = "<ol>";
+
+        for (let i = 0; i < numberOfTracks; i++) {
+          list += "<li>" + TrackList[i] + "</li>";
+        }
+
+        document.getElementById("albumimage").src = AlbumImage;
+        document.getElementById("namealbum").innerHTML = AlbumName2;
+        document.getElementById("nameartist").innerHTML = ArtistName2;
+        document.getElementById("arrPrint").innerHTML = list;
+      }
+      getAlbumTracks();
+    </script>
+    <form action="comparison.html">
+      <div class="card">
+        <div class="image">
+          <img id="albumimage" src="" alt="" />
+        </div>
+        <div id="namealbum"><br /></div>
+        <div id="nameartist"></div>
+        <div class="tracklist">
+          <div id="arrPrint"></div>
+        </div>
+        <div class="search">
+          <input type="submit" class="rankbutton" value="Start Ranking" />
+        </div>
+      </div>
+    </form>
+  </body>
+</html>

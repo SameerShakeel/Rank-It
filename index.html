@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head></head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rank It.</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="icon"
+      href="https://cdn.discordapp.com/attachments/591007423062605825/929849003733028864/RICON.png"
+    />
+    <script>
+      function passValues() {
+        let album = document.getElementById("album").value;
+        let artist = document.getElementById("artist").value;
+        localStorage.setItem("textvalue", album);
+        localStorage.setItem("textvalue2", artist);
+        return false;
+      }
+    </script>
+  </head>
+  <body>
+    <form method="get" action="tracklist.html">
+      <div class="card">
+        <div class="image">
+          <img
+            src="https://cdn.discordapp.com/attachments/591007423062605825/929810283801763960/SongRankerlogo.png"
+            alt=""
+          />
+        </div>
+        <br /><br />
+        <div>
+          <div class="search">
+            <input
+              type="text"
+              id="album"
+              class="searchbar"
+              placeholder="Album Name"
+              required
+            />
+          </div>
+        </div>
+        <br />
+        <div>
+          <div class="search">
+            <input
+              type="text"
+              id="artist"
+              class="searchbar"
+              placeholder="Artist's Name"
+              required
+            />
+          </div>
+        </div>
+        <br /><br />
+        <div>
+          <div class="search">
+            <input
+              type="submit"
+              class="submitbutton"
+              value="Get Album Tracks"
+              onclick="passValues();"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </body>
+</html>
